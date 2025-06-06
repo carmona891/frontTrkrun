@@ -7,7 +7,7 @@ import { Rol, RolCreateRequest, RolUpdateRequest } from '../Dto/rol.model';
   providedIn: 'root'
 })
 export class RolService {
-  private apiUrl = 'http://localhost:5186/api/Roles';
+  private apiUrl = 'https://apitrkrun-production.up.railway.app/api/Roles';
 
   constructor(private http: HttpClient) { }
 

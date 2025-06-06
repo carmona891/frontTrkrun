@@ -20,7 +20,7 @@ export interface UserDto {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:5186/api/Users';
+  private apiUrl = 'https://apitrkrun-production.up.railway.app/api/Users';
   
   private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();

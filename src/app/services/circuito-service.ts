@@ -7,7 +7,7 @@ import { Circuito, CircuitoCreateRequest, CircuitoUpdateRequest } from '../Dto/c
   providedIn: 'root'
 })
 export class CircuitoService {
-  private apiUrl = 'http://localhost:5186/api/Circuitos';
+  private apiUrl = 'https://apitrkrun-production.up.railway.app/api/Circuitos';
 
   constructor(private http: HttpClient) { }
 

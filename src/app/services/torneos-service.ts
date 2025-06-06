@@ -8,7 +8,7 @@ import { Torneo, TorneoCreateRequest, TorneoUpdateRequest } from '../Dto/torneo.
   providedIn: 'root'
 })
 export class TorneoService {
-  private apiUrl = 'http://localhost:5186/api/Torneos';
+  private apiUrl = 'https://apitrkrun-production.up.railway.app/api/Torneos';
 
   constructor(private http: HttpClient) { }
 
