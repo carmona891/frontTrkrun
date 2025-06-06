@@ -1,7 +1,7 @@
 {
     "services": [
       {
-        "type": "static",
+        "type": "web",
         "name": "fronttrkrun",
         "staticDir": "dist/trk-run-latest",
         "buildCommand": "npm install && npm run build"
