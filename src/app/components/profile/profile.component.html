@@ -1,0 +1,230 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 relative overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-red-500 to-transparent transform -skew-y-12 scale-150"></div>
+    <div class="absolute inset-0 bg-gradient-to-l from-transparent via-blue-500 to-transparent transform skew-y-12 scale-150"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="relative z-10 p-4 sm:p-6 lg:p-8 pb-4">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <button 
+        (click)="onGoBack()"
+        class="flex items-center gap-2 text-gray-300 hover:text-red-400 bg-gray-800/80 backdrop-blur-sm border border-gray-700 hover:border-red-500 px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-x-1">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span class="hidden sm:inline">Volver</span>
+      </button>
+      
+      <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black">
+        <span class="text-white">Mi </span>
+        <span class="bg-gradient-to-r from-red-500 to-blue-400 bg-clip-text text-transparent">Perfil</span>
+      </h1>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoadingProfile" class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-8">
+    <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl text-center">
+      <div class="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-white text-lg sm:text-xl">Cargando perfil...</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="profileError && !isLoadingProfile" class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-8">
+    <div class="bg-red-900/80 backdrop-blur-xl border border-red-800 rounded-2xl p-6 sm:p-8 shadow-2xl text-center">
+      <p class="text-red-300 text-lg sm:text-xl">{{ profileError }}</p>
+      <button 
+        (click)="refreshProfile()"
+        class="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300">
+        Reintentar
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoadingProfile && !profileError" class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-8 space-y-6 lg:space-y-8">
+    
+    <!-- Profile Card -->
+    <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
+        
+        <!-- Avatar Section -->
+        <div class="flex flex-col items-center space-y-4 lg:col-span-1">
+          <div class="relative group">
+            <!-- Avatar Container -->
+            <div class="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full p-1 bg-gradient-to-br from-red-500 to-blue-500">
+              <div class="w-full h-full bg-gray-800 rounded-full flex items-center justify-center">
+                <svg class="w-16 h-16 sm:w-20 sm:h-20 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+              
+              <!-- Status Indicator -->
+              <div class="absolute bottom-2 right-2 w-4 h-4 sm:w-6 sm:h-6 bg-green-500 border-2 sm:border-4 border-gray-900 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Info Section -->
+        <div class="lg:col-span-2 space-y-4 lg:space-y-6">
+          
+          <!-- Name Editor -->
+          <div class="space-y-3 lg:space-y-4">
+            <div *ngIf="!isEditingName" class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+              <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-white break-words">{{ user.name }}</h2>
+              <button 
+                (click)="startEditingName()"
+                class="self-start sm:self-auto text-gray-400 hover:text-blue-400 bg-gray-800/50 hover:bg-blue-500/20 border border-gray-700 hover:border-blue-500 p-2 rounded-lg transition-all duration-300 transform hover:scale-110">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div *ngIf="isEditingName" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <input 
+                type="text" 
+                [(ngModel)]="tempName" 
+                class="bg-gray-800 border-2 border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-lg sm:text-xl lg:text-2xl font-bold flex-1 transition-all duration-300"
+                placeholder="Ingresa tu nombre"
+                (keyup.enter)="saveName()"
+                (keyup.escape)="cancelEditName()">
+              
+              <div class="flex gap-2 sm:gap-3">
+                <button 
+                  (click)="saveName()"
+                  class="text-green-400 hover:text-green-300 bg-green-500/20 hover:bg-green-500/30 border border-green-500 hover:border-green-400 p-2 sm:p-3 rounded-lg transition-all duration-300 transform hover:scale-110 flex-shrink-0">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </button>
+                
+                <button 
+                  (click)="cancelEditName()"
+                  class="text-red-400 hover:text-red-300 bg-red-500/20 hover:bg-red-500/30 border border-red-500 hover:border-red-400 p-2 sm:p-3 rounded-lg transition-all duration-300 transform hover:scale-110 flex-shrink-0">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Details -->
+          <div class="space-y-2">
+            <p class="text-lg sm:text-xl font-bold text-blue-400">{{ getRoleName() }}</p>
+            <p class="text-gray-300 text-base sm:text-lg break-all sm:break-words">{{ user.email }}</p>
+            <!--<p class="text-gray-500 text-sm sm:text-base">ID: {{ user.id || 'N/A' }}</p>-->
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
+            <button 
+              (click)="onEditProfile()"
+              class="flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-red-500/50">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              <span class="text-sm sm:text-base">Editar Perfil</span>
+            </button>
+            
+            <button 
+              (click)="onChangePassword()"
+              class="flex items-center justify-center gap-2 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+              <span class="text-sm sm:text-base">Cambiar Contraseña</span>
+            </button>
+
+            <button 
+              (click)="onLogout()"
+              class="flex items-center justify-center gap-2 border-2 border-red-500 text-red-400 hover:bg-red-500 hover:text-white px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/30">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1"></path>
+              </svg>
+              <span class="text-sm sm:text-base">Cerrar Sesión</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+      <h3 class="text-xl sm:text-2xl font-black text-white mb-4 sm:mb-6">
+        <span class="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Estadísticas de Competición</span>
+      </h3>
+      
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-4 sm:mb-6">
+        <div class="bg-gray-800/60 border border-gray-700 rounded-xl p-4 sm:p-6 text-center hover:border-red-500 hover:bg-red-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+          <div class="text-2xl sm:text-3xl mb-2">🏁</div>
+          <div class="text-2xl sm:text-3xl font-black text-white mb-1">{{ user.torneosInscritos?.length || 0 }}</div>
+          <div class="text-gray-400 text-xs sm:text-sm font-semibold">Torneos</div>
+        </div>
+        
+        <div class="bg-gray-800/60 border border-gray-700 rounded-xl p-4 sm:p-6 text-center hover:border-red-500 hover:bg-red-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+          <div class="text-2xl sm:text-3xl mb-2">⭐</div>
+          <div class="text-2xl sm:text-3xl font-black text-white mb-1">{{ user.points }}</div>
+          <div class="text-gray-400 text-xs sm:text-sm font-semibold">Puntos</div>
+        </div>
+        
+        <div class="bg-gray-800/60 border border-gray-700 rounded-xl p-4 sm:p-6 text-center hover:border-red-500 hover:bg-red-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+          <div class="text-2xl sm:text-3xl mb-2">🏆</div>
+          <div class="text-2xl sm:text-3xl font-black text-white mb-1">{{ Math.floor((user.torneosInscritos?.length || 0) * 0.15) }}</div>
+          <div class="text-gray-400 text-xs sm:text-sm font-semibold">Victorias</div>
+        </div>
+        
+        <div class="bg-gray-800/60 border border-gray-700 rounded-xl p-4 sm:p-6 text-center hover:border-red-500 hover:bg-red-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+          <div class="text-2xl sm:text-3xl mb-2">🥇</div>
+          <div class="text-2xl sm:text-3xl font-black text-white mb-1">{{ Math.floor((user.torneosInscritos?.length || 0) * 0.45) }}</div>
+          <div class="text-gray-400 text-xs sm:text-sm font-semibold">Podios</div>
+        </div>
+      </div>
+      
+      <!--
+      <button 
+        (click)="onViewStats()"
+        class="flex items-center justify-center gap-2 w-full border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:translate-x-1">
+        <span class="text-sm sm:text-base">Ver Estadísticas Completas</span>
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+      -->
+    </div>
+
+    <!-- Torneos Section -->
+    <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+      <h3 class="text-xl sm:text-2xl font-black text-white mb-4 sm:mb-6">
+        <span class="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Torneos Inscritos</span>
+      </h3>
+      
+      <div *ngIf="user.torneosInscritos && user.torneosInscritos.length > 0; else noTorneos" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div *ngFor="let torneo of user.torneosInscritos" 
+             class="bg-gray-800/60 border border-gray-700 rounded-xl p-4 sm:p-6 hover:border-yellow-500 hover:bg-yellow-500/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="text-3xl sm:text-4xl flex-shrink-0">🏆</div>
+            <div class="flex-1 min-w-0">
+              <h4 class="text-white font-bold text-base sm:text-lg mb-1 truncate">{{ torneo.name || 'Torneo Sin Nombre' }}</h4>
+              <p class="text-gray-400 text-sm truncate">{{ torneo.fecha || 'Fecha no disponible' }}</p>
+              <p class="text-blue-400 text-sm truncate">Premio: {{ torneo.premio || 'N/A' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noTorneos>
+        <div class="text-center py-6 sm:py-8">
+          <div class="text-4xl sm:text-6xl mb-4">🏁</div>
+          <p class="text-gray-400 text-base sm:text-lg">No hay torneos inscritos</p>
+          <p class="text-gray-500 text-sm">¡Inscríbete en tu primer torneo!</p>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+</div>

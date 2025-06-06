@@ -1,0 +1,265 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-red-500 to-transparent transform -skew-y-12 scale-150"></div>
+      <div class="absolute inset-0 bg-gradient-to-l from-transparent via-blue-500 to-transparent transform skew-y-12 scale-150"></div>
+    </div>
+  
+    <!-- Header -->
+    <div class="relative z-10 p-8 pb-4">
+      <div class="max-w-7xl mx-auto text-center">
+        <h1 class="text-5xl md:text-7xl font-black mb-6">
+          <span class="text-white">Contacta con </span>
+          <span class="bg-gradient-to-r from-red-500 to-blue-400 bg-clip-text text-transparent">TrkRun</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+          ¿Tienes preguntas sobre nuestros servicios? ¿Necesitas soporte técnico? 
+          Estamos aquí para ayudarte en tu pasión por el motor.
+        </p>
+      </div>
+    </div>
+  
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 pb-12">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <!-- Contact Form -->
+        <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
+          <div class="mb-8">
+            <h2 class="text-3xl font-black text-white mb-2">Envíanos un Mensaje</h2>
+            <p class="text-gray-400">Te responderemos lo antes posible</p>
+          </div>
+  
+          <!-- Success Message -->
+          <div *ngIf="formSubmitted" class="bg-green-900/20 border border-green-500/50 rounded-lg p-4 mb-6">
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <div>
+                <p class="text-green-400 font-semibold">¡Mensaje enviado correctamente!</p>
+                <p class="text-green-300 text-sm">Te responderemos pronto.</p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Contact Form -->
+          <form (ngSubmit)="onSubmit()" class="space-y-6" *ngIf="!formSubmitted">
+            <!-- Name and Email Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Nombre *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="contactForm.name"
+                  name="name"
+                  class="w-full bg-gray-800 border border-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white px-4 py-3 rounded-lg transition-all duration-300"
+                  [class.border-red-500]="formErrors.name"
+                  placeholder="Tu nombre completo">
+                <p *ngIf="formErrors.name" class="text-red-400 text-sm mt-1">{{ formErrors.name }}</p>
+              </div>
+  
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Email *</label>
+                <input
+                  type="email"
+                  [(ngModel)]="contactForm.email"
+                  name="email"
+                  class="w-full bg-gray-800 border border-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white px-4 py-3 rounded-lg transition-all duration-300"
+                  [class.border-red-500]="formErrors.email"
+                  placeholder="tu@email.com">
+                <p *ngIf="formErrors.email" class="text-red-400 text-sm mt-1">{{ formErrors.email }}</p>
+              </div>
+            </div>
+  
+            <!-- Phone and Subject Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Teléfono</label>
+                <input
+                  type="tel"
+                  [(ngModel)]="contactForm.phone"
+                  name="phone"
+                  class="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white px-4 py-3 rounded-lg transition-all duration-300"
+                  placeholder="+34 600 123 456">
+              </div>
+  
+              <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">Asunto *</label>
+                <select
+                  [(ngModel)]="contactForm.subject"
+                  name="subject"
+                  class="w-full bg-gray-800 border border-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white px-4 py-3 rounded-lg transition-all duration-300"
+                  [class.border-red-500]="formErrors.subject">
+                  <option value="">Selecciona un asunto</option>
+                  <option value="info-general">Información General</option>
+                  <option value="inscripciones">Inscripciones</option>
+                  <option value="soporte-tecnico">Soporte Técnico</option>
+                  <option value="patrocinios">Patrocinios</option>
+                  <option value="prensa">Prensa y Medios</option>
+                  <option value="otros">Otros</option>
+                </select>
+                <p *ngIf="formErrors.subject" class="text-red-400 text-sm mt-1">{{ formErrors.subject }}</p>
+              </div>
+            </div>
+  
+            <!-- Contact Method -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-3">Método de contacto preferido</label>
+              <div class="flex flex-wrap gap-4">
+                <label class="flex items-center">
+                  <input
+                    type="radio"
+                    [(ngModel)]="contactForm.contactMethod"
+                    name="contactMethod"
+                    value="email"
+                    class="w-4 h-4 text-red-600 bg-gray-800 border-gray-600 focus:ring-red-500 focus:ring-2">
+                  <span class="ml-2 text-gray-300">📧 Email</span>
+                </label>
+                <label class="flex items-center">
+                  <input
+                    type="radio"
+                    [(ngModel)]="contactForm.contactMethod"
+                    name="contactMethod"
+                    value="phone"
+                    class="w-4 h-4 text-red-600 bg-gray-800 border-gray-600 focus:ring-red-500 focus:ring-2">
+                  <span class="ml-2 text-gray-300">📞 Teléfono</span>
+                </label>
+                <label class="flex items-center">
+                  <input
+                    type="radio"
+                    [(ngModel)]="contactForm.contactMethod"
+                    name="contactMethod"
+                    value="whatsapp"
+                    class="w-4 h-4 text-red-600 bg-gray-800 border-gray-600 focus:ring-red-500 focus:ring-2">
+                  <span class="ml-2 text-gray-300">💬 WhatsApp</span>
+                </label>
+              </div>
+            </div>
+  
+            <!-- Message -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Mensaje *</label>
+              <textarea
+                [(ngModel)]="contactForm.message"
+                name="message"
+                rows="5"
+                class="w-full bg-gray-800 border border-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white px-4 py-3 rounded-lg transition-all duration-300 resize-none"
+                [class.border-red-500]="formErrors.message"
+                placeholder="Cuéntanos cómo podemos ayudarte..."></textarea>
+              <p *ngIf="formErrors.message" class="text-red-400 text-sm mt-1">{{ formErrors.message }}</p>
+              <p class="text-gray-500 text-sm mt-1">Mínimo 10 caracteres</p>
+            </div>
+  
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 text-white py-4 px-6 rounded-lg font-bold text-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-lg hover:shadow-red-500/50 disabled:shadow-none disabled:cursor-not-allowed flex items-center justify-center">
+              <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-3 h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {{ isSubmitting ? 'Enviando mensaje...' : 'Enviar Mensaje' }}
+            </button>
+          </form>
+        </div>
+  
+        <!-- Contact Info -->
+        <div class="space-y-8">
+          
+          <!-- Contact Methods -->
+          <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-black text-white mb-6">Información de Contacto</h3>
+            
+            <div class="space-y-6">
+              <div *ngFor="let contact of contactInfo" class="flex items-start gap-4 p-4 bg-gray-800/50 rounded-xl hover:bg-gray-800/70 transition-all duration-300 cursor-pointer group"
+                   (click)="openExternalLink(contact.link)">
+                <div class="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  {{ contact.icon }}
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-white font-bold text-lg mb-1">{{ contact.title }}</h4>
+                  <p class="text-blue-400 font-semibold mb-1 group-hover:text-blue-300">{{ contact.value }}</p>
+                  <p class="text-gray-400 text-sm">{{ contact.description }}</p>
+                </div>
+                <svg class="w-5 h-5 text-gray-500 group-hover:text-red-400 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Schedule -->
+          <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-black text-white mb-6">Horarios de Atención</h3>
+            
+            <div class="space-y-4">
+              <div *ngFor="let item of schedule" 
+                   class="flex justify-between items-center p-4 rounded-lg"
+                   [ngClass]="{
+                     'bg-green-900/20 border border-green-500/50': item.type === 'work',
+                     'bg-yellow-900/20 border border-yellow-500/50': item.type === 'weekend',
+                     'bg-gray-800/50 border border-gray-600': item.type === 'closed',
+                     'bg-red-900/20 border border-red-500/50 animate-pulse': item.type === 'emergency'
+                   }">
+                <span class="font-semibold"
+                      [ngClass]="{
+                        'text-green-400': item.type === 'work',
+                        'text-yellow-400': item.type === 'weekend',
+                        'text-gray-400': item.type === 'closed',
+                        'text-red-400': item.type === 'emergency'
+                      }">
+                  {{ item.day }}
+                </span>
+                <span class="font-bold"
+                      [ngClass]="{
+                        'text-white': item.type !== 'emergency',
+                        'text-red-300': item.type === 'emergency'
+                      }">
+                  {{ item.hours }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Quick Actions -->
+          <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-black text-white mb-6">Contacto Rápido</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <button
+                (click)="callPhone('+34900123456')"
+                class="bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-2xl mb-2">📞</div>
+                <div class="text-sm">Llamar Ahora</div>
+              </button>
+              
+              <button
+                (click)="sendWhatsApp()"
+                class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-2xl mb-2">💬</div>
+                <div class="text-sm">WhatsApp</div>
+              </button>
+            </div>
+          </div>
+  
+          <!-- Social Media -->
+          <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-black text-white mb-6">Síguenos</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <button
+                *ngFor="let social of socialLinks"
+                (click)="openExternalLink(social.url)"
+                class="bg-gray-800/60 hover:bg-gray-700 border border-gray-600 hover:border-gray-500 p-4 rounded-xl text-center transition-all duration-300 transform hover:scale-105 group">
+                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">{{ social.icon }}</div>
+                <div class="text-white font-semibold text-sm">{{ social.name }}</div>
+              </button>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>

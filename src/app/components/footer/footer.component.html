@@ -1,0 +1,212 @@
+
+<footer class="footer">
+    <div class="footer-container">
+      <!-- Main Footer Content -->
+      <div class="footer-grid">
+        
+        <!-- TrkRun Column -->
+        <div class="footer-column company-info" [@fadeInUp]>
+          <div class="footer-logo">
+            <h3>TrkRun</h3>
+            <span class="logo-tagline">Racing Excellence</span>
+          </div>
+          <p class="company-description">
+            Especialistas en servicios técnicos para el mundo del motor. 
+            Ofrecemos soluciones profesionales para pilotos, equipos y entusiastas 
+            del automovilismo con más de 15 años de experiencia en competición.
+          </p>
+          
+          <!-- Social Links -->
+          <div class="social-section">
+            <h4>Síguenos</h4>
+            <div class="social-links">
+              <a *ngFor="let social of socialLinks" 
+                 [href]="social.url" 
+                 class="social-link"
+                 [style.--social-color]="social.color"
+                 [title]="social.name"
+                 [@socialHover]="hoveredSocial === social.name ? 'hovered' : 'normal'"
+                 (mouseenter)="onSocialHover(social.name, true)"
+                 (mouseleave)="onSocialHover(social.name, false)"
+                 (click)="openExternalLink(social.url)"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                <span class="social-icon">{{ social.icon }}</span>
+                <span class="social-tooltip">{{ social.name }}</span>
+              </a>
+            </div>
+          </div>
+  
+          <!-- Newsletter Subscription -->
+          <div class="newsletter-section">
+            <h4>Newsletter</h4>
+            <p>Recibe las últimas noticias y ofertas</p>
+            <div class="newsletter-form">
+              <input type="email" placeholder="tu@email.com" class="newsletter-input">
+              <button class="newsletter-btn" (click)="subscribeToNewsletter()">
+                <span>📧</span>
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Contact Column -->
+        <div class="footer-column contact-column" [@fadeInUp]>
+          <h3>Contacto</h3>
+          <div class="contact-list">
+            <div *ngFor="let contact of contactInfo" class="contact-item">
+              <div class="contact-icon">{{ contact.icon }}</div>
+              <div class="contact-details">
+                <span class="contact-type">{{ contact.type }}</span>
+                <a *ngIf="contact.link; else noLink" 
+                   [href]="contact.link" 
+                   class="contact-value"
+                   [class.multiline]="contact.value.includes('\n')">
+                  <span *ngFor="let line of contact.value.split('\n')" class="contact-line">
+                    {{ line }}
+                  </span>
+                </a>
+                <ng-template #noLink>
+                  <span class="contact-value multiline">
+                    <span *ngFor="let line of contact.value.split('\n')" class="contact-line">
+                      {{ line }}
+                    </span>
+                  </span>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Current Status -->
+          <div class="status-indicator">
+            <div class="status-light" [style.background-color]="getCurrentScheduleStatus().color"></div>
+            <span class="status-text">{{ getCurrentScheduleStatus().message }}</span>
+          </div>
+        </div>
+  
+        <!-- Quick Links Column -->
+        <div class="footer-column links-column" [@fadeInUp]>
+          <h3>Enlaces Rápidos</h3>
+          <div class="links-grid">
+            <div class="links-section">
+              <h4>Servicios</h4>
+              <ul class="quick-links">
+                <li><a href="#" (click)="scrollToSection('servicios')">Todos los Servicios</a></li>
+                <li><a href="#" (click)="scrollToSection('inspeccion')">Inspección</a></li>
+                <li><a href="#" (click)="scrollToSection('mantenimiento')">Mantenimiento</a></li>
+                <li><a href="#" (click)="scrollToSection('competicion')">Competición</a></li>
+              </ul>
+            </div>
+            
+            <div class="links-section">
+              <h4>Empresa</h4>
+              <ul class="quick-links">
+                <li *ngFor="let link of quickLinks.slice(0, 4)">
+                  <a href="#" (click)="scrollToSection(link.url)">{{ link.name }}</a>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="links-section">
+              <h4>Legal</h4>
+              <ul class="quick-links">
+                <li *ngFor="let link of quickLinks.slice(4)">
+                  <a href="#" (click)="scrollToSection(link.url)">{{ link.name }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Schedule & Theme Column -->
+        <div class="footer-column schedule-column" [@fadeInUp]>
+          <h3>Horario de Atención</h3>
+          <div class="schedule">
+            <div *ngFor="let schedule of scheduleData" 
+                 class="schedule-item"
+                 [class]="schedule.type">
+              <div class="schedule-days">{{ schedule.days }}</div>
+              <div class="schedule-hours">{{ schedule.hours }}</div>
+            </div>
+          </div>
+  
+          <!-- Emergency Contact -->
+          <div class="emergency-contact">
+            <h4>🚨 Emergencias 24/7</h4>
+            <a href="tel:+34600123456" class="emergency-number">+34 600 123 456</a>
+            <p>Solo para averías en competición</p>
+          </div>
+  
+          <!-- Theme Selector -->
+          <div class="theme-selector">
+            <h4>Personaliza tu Experiencia</h4>
+            <p>Elige tu tema de color favorito</p>
+            <div class="theme-options">
+              <button 
+                *ngFor="let theme of themes" 
+                class="theme-btn"
+                [class.active]="currentTheme?.name === theme.name"
+                [style.background]="theme.gradient"
+                [title]="getThemeDisplayName(theme.name)"
+                [attr.data-theme]="theme.name"
+                (click)="changeTheme(theme.name)">
+                <div class="theme-check" *ngIf="currentTheme?.name === theme.name">✓</div>
+              </button>
+            </div>
+            <div class="current-theme" *ngIf="currentTheme">
+              <span>Tema actual: <strong>{{ getThemeDisplayName(currentTheme.name) }}</strong></span>
+            </div>
+          </div>
+  
+          <!-- Back to Top -->
+          <button class="back-to-top" (click)="scrollToTop()" title="Volver arriba">
+            <span class="arrow-up">↑</span>
+            <span>Subir</span>
+          </button>
+        </div>
+      </div>
+  
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <div class="copyright">
+            <p>&copy; {{ currentYear }} TrkRun Racing Services. Todos los derechos reservados.</p>
+            <p class="made-with">Desarrollado con <span class="heart">❤️</span> y pasión por el motor <span class="flag">🏁</span></p>
+          </div>
+          
+          <div class="footer-badges">
+            <div class="badge">
+              <span class="badge-icon">🔒</span>
+              <span class="badge-text">Sitio Seguro</span>
+            </div>
+            <div class="badge">
+              <span class="badge-icon">⚡</span>
+              <span class="badge-text">Carga Rápida</span>
+            </div>
+            <div class="badge">
+              <span class="badge-icon">♿</span>
+              <span class="badge-text">Accesible</span>
+            </div>
+          </div>
+  
+          <div class="footer-links">
+            <a href="#terminos" (click)="scrollToSection('terminos')">Términos</a>
+            <span class="separator">•</span>
+            <a href="#privacidad" (click)="scrollToSection('privacidad')">Privacidad</a>
+            <span class="separator">•</span>
+            <a href="#cookies" (click)="scrollToSection('cookies')">Cookies</a>
+            <span class="separator">•</span>
+            <a href="#sitemap" (click)="scrollToSection('sitemap')">Mapa del Sitio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Floating Elements -->
+    <div class="footer-decoration">
+      <div class="floating-icon icon-1">🏎️</div>
+      <div class="floating-icon icon-2">⚙️</div>
+      <div class="floating-icon icon-3">🔧</div>
+      <div class="floating-icon icon-4">🏁</div>
+    </div>
+  </footer>

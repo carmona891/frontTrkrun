@@ -1,0 +1,86 @@
+<header class="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-gray-800">
+  <nav class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <link rel="shortcut icon" href="/src/assets/logo.ico" type="image/x-icon">
+      <div class="flex items-center space-x-3">
+        <div class="relative">
+          <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-blue-500 rounded-lg flex items-center justify-center">
+            <img src="../../../assets/logo.png" alt="">
+          </div>
+          <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
+        </div>
+        <div>
+          <h1 class="text-2xl font-black text-white">
+            <span class="bg-gradient-to-r from-red-500 to-blue-400 bg-clip-text text-transparent">TRK</span>
+            <span class="text-white">RUN</span>
+          </h1>
+          <p class="text-xs text-gray-400 -mt-1">Championship Series</p>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex items-center space-x-8">
+        <a *ngFor="let item of navigationItems" 
+           [href]="item.href" 
+           [class]="item.active ? 'text-white' : 'text-gray-300'"
+           class="hover:text-red-400 font-semibold transition-colors duration-300 relative group">
+          {{item.label}}
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-500 group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="hidden md:flex items-center space-x-4">
+        <button 
+          (click)="navigateToLogin()"
+          class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black px-6 py-2 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105">
+          Iniciar Sesión
+        </button>
+        <button 
+          (click)="navigateToRegister()"
+          class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-2 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/50">
+          Inscribirse
+        </button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button (click)="toggleMobileMenu()" class="lg:hidden text-white p-2">
+        <svg *ngIf="!isMobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg *ngIf="isMobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div *ngIf="isMobileMenuOpen" class="lg:hidden bg-black/98 backdrop-blur-md border-t border-gray-800">
+      <div class="px-4 py-6 space-y-4">
+        <a *ngFor="let item of navigationItems" 
+           [href]="item.href" 
+           (click)="closeMobileMenu()"
+           [class]="item.active ? 'text-white' : 'text-gray-300'"
+           class="block hover:text-red-400 font-semibold py-2 transition-colors duration-300">
+          {{item.label}}
+        </a>
+        <div class="pt-4 space-y-3">
+          <button 
+            (click)="navigateToLogin()"
+            class="w-full border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black py-3 rounded-full font-semibold transition-all duration-300">
+            Iniciar Sesión
+          </button>
+          <button 
+            (click)="navigateToRegister()"
+            class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 rounded-full font-semibold transition-all duration-300 shadow-lg">
+            Inscribirse
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Spacer para compensar el header fijo -->
+<div class="h-20"></div>

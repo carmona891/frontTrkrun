@@ -1,0 +1,346 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 relative overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-red-500 to-transparent transform -skew-y-12 scale-150"></div>
+    <div class="absolute inset-0 bg-gradient-to-l from-transparent via-blue-500 to-transparent transform skew-y-12 scale-150"></div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-red-500"></div>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div *ngIf="success" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+      </svg>
+      {{ success }}
+      <button (click)="clearMessages()" class="ml-4 text-green-200 hover:text-white">×</button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+      </svg>
+      {{ error }}
+      <button (click)="clearMessages()" class="ml-4 text-red-200 hover:text-white">×</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="relative z-10 p-8 pb-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-4xl md:text-6xl font-black mb-4">
+            <span class="text-white">Torneos </span>
+            <span class="bg-gradient-to-r from-red-500 to-blue-400 bg-clip-text text-transparent">TrkRun</span>
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl">
+            Únete a emocionantes competiciones o crea tu propio torneo. ¡La pista te espera!
+          </p>
+        </div>
+        <button 
+          (click)="openCreateModal()"
+          [disabled]="!currentUser"
+          class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/50 flex items-center gap-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Crear Torneo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 mb-8">
+    <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 shadow-2xl">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <!-- Search by Name -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-2">Buscar por nombre</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              [(ngModel)]="searchName"
+              (ngModelChange)="onSearchChange()"
+              placeholder="Nombre del torneo..."
+              class="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white rounded-lg transition-all duration-300">
+          </div>
+        </div>
+
+        <!-- Filter by Date -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-2">Fecha</label>
+          <select 
+            [(ngModel)]="filterDate"
+            (ngModelChange)="onFilterChange()"
+            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg transition-all duration-300">
+            <option value="">Todas las fechas</option>
+            <option value="today">Hoy</option>
+            <option value="tomorrow">Mañana</option>
+            <option value="this-week">Esta semana</option>
+            <option value="this-month">Este mes</option>
+          </select>
+        </div>
+
+        <!-- Filter by Participants -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-2">Participantes</label>
+          <select 
+            [(ngModel)]="filterParticipants"
+            (ngModelChange)="onFilterChange()"
+            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg transition-all duration-300">
+            <option value="">Cualquier cantidad</option>
+            <option value="1-10">1-10 participantes</option>
+            <option value="11-25">11-20 participantes</option>
+          </select>
+        </div>
+
+        <!-- Results Count -->
+        <div class="flex items-end">
+          <div class="w-full text-center py-3">
+            <div class="text-2xl font-bold text-white">{{ torneosFiltered.length }}</div>
+            <div class="text-sm text-gray-300">Torneos encontrados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tournaments Grid -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" *ngIf="torneosFiltered.length > 0; else noTorneos">
+      
+      <!-- Tournament Card -->
+      <div 
+        *ngFor="let torneo of torneosFiltered; trackBy: trackByTorneoId"
+        class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:border-gray-700 relative overflow-hidden">
+        
+        <!-- Status Badge -->
+        <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold"
+             [ngClass]="getTorneoStatusClass(torneo)">
+          {{ getTorneoStatusText(torneo) }}
+        </div>
+
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-4">
+            <div class="bg-blue-500/20 rounded-lg p-3">
+              <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.5 8.5L22 9L17 14L18.5 22L12 18.5L5.5 22L7 14L2 9L8.5 8.5L12 2Z"/>
+              </svg>
+            </div>
+          </div>
+          
+          <h3 class="text-xl font-black text-white mb-2">{{ torneo.name }}</h3>
+          <p class="text-gray-300 text-sm mb-4">Circuito: {{ torneo.circuitoNombre }}</p>
+          
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center text-gray-300 text-sm">
+              <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              {{ formatDate(torneo.fecha) }}
+            </div>
+            <div class="flex items-center text-gray-300 text-sm">
+              <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              {{ torneo.participantesCount }}/20 participantes
+            </div>
+            <div class="flex items-center text-gray-300 text-sm">
+              <svg class="w-4 h-4 mr-2 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Premio: {{ formatPrize(torneo.premio) }}
+            </div>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div class="mb-4">
+            <div class="w-full bg-gray-700 rounded-full h-2">
+              <div 
+                class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
+                [style.width.%]="((torneo.participantesCount || 0) / 20) * 100">
+              </div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1 text-center">
+              {{ torneo.participantesCount || 0 }} de 20 plazas ocupadas
+            </div>
+          </div>
+          
+          <!-- Action Button -->
+          <button 
+            *ngIf="torneo.isUserInscrito"
+            (click)="leaveTorneo(torneo)"
+            [disabled]="loading"
+            class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 text-white py-3 px-4 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/50">
+            {{ getButtonText(torneo) }}
+          </button>
+          
+          <button 
+            *ngIf="!torneo.isUserInscrito"
+            (click)="joinTorneo(torneo)"
+            [disabled]="isButtonDisabled(torneo) || loading"
+            class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white py-3 px-4 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50">
+            {{ getButtonText(torneo) }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Tournaments Message -->
+    <ng-template #noTorneos>
+      <div class="text-center py-12">
+        <svg class="w-24 h-24 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.796 0-5.262-1.438-6.673-3.615M3 3l18 18"></path>
+        </svg>
+        <h3 class="text-2xl font-bold text-white mb-2">No se encontraron torneos</h3>
+        <p class="text-gray-400 mb-6">Prueba ajustando los filtros o crea un nuevo torneo.</p>
+        <button 
+          (click)="openCreateModal()"
+          [disabled]="!currentUser"
+          class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-bold transition-all duration-300">
+          Crear Torneo
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Tournament Stats -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 pb-12">
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 text-center shadow-2xl">
+        <div class="text-3xl font-black text-red-500 mb-2">{{ torneos.length }}</div>
+        <div class="text-gray-300 font-semibold">Torneos Activos</div>
+      </div>
+      <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 text-center shadow-2xl">
+        <div class="text-3xl font-black text-blue-400 mb-2">{{ getTotalParticipants() }}</div>
+        <div class="text-gray-300 font-semibold">Pilotos Registrados</div>
+      </div>
+      <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 text-center shadow-2xl">
+        <div class="text-3xl font-black text-yellow-400 mb-2">{{ getTotalPrizes() }}</div>
+        <div class="text-gray-300 font-semibold">Premios Totales</div>
+      </div>
+      <div class="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-6 text-center shadow-2xl">
+        <div class="text-3xl font-black text-green-400 mb-2">{{ getThisWeekTournaments() }}</div>
+        <div class="text-gray-300 font-semibold">Torneos Esta Semana</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Tournament Modal -->
+<div *ngIf="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-gray-800 shadow-2xl">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-white">Crear Nuevo Torneo</h2>
+      <button (click)="closeCreateModal()" class="text-gray-400 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="createTorneoForm" (ngSubmit)="createTorneo()">
+      <!-- Nombre -->
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-300 mb-2">Nombre del Torneo</label>
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="Ej: Copa de Velocidad"
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg transition-all duration-300"
+          [class.border-red-500]="nameControl?.invalid && nameControl?.touched">
+        <div *ngIf="nameControl?.invalid && nameControl?.touched" class="text-red-400 text-sm mt-1">
+          <div *ngIf="nameControl?.errors?.['required']">El nombre es requerido</div>
+          <div *ngIf="nameControl?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres</div>
+        </div>
+      </div>
+
+      <!-- Fecha -->
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-300 mb-2">Fecha y Hora</label>
+        <input
+          type="datetime-local"
+          formControlName="fecha"
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg transition-all duration-300"
+          [class.border-red-500]="fechaControl?.invalid && fechaControl?.touched">
+        <div *ngIf="fechaControl?.invalid && fechaControl?.touched" class="text-red-400 text-sm mt-1">
+          <div *ngIf="fechaControl?.errors?.['required']">La fecha es requerida</div>
+          <div *ngIf="fechaControl?.errors?.['pastDate']">La fecha debe ser futura</div>
+        </div>
+      </div>
+
+      <!-- Circuito -->
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-300 mb-2">Circuito</label>
+        <select
+          formControlName="circuitoId"
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg transition-all duration-300"
+          [class.border-red-500]="circuitoControl?.invalid && circuitoControl?.touched">
+          <option value="">Selecciona un circuito</option>
+          <option *ngFor="let circuito of circuitos" [value]="circuito.id">
+            {{ circuito.name }} - {{ circuito.ubicacion }}
+          </option>
+        </select>
+        <div *ngIf="circuitoControl?.invalid && circuitoControl?.touched" class="text-red-400 text-sm mt-1">
+          <div *ngIf="circuitoControl?.errors?.['required']">Debes seleccionar un circuito</div>
+        </div>
+      </div>
+
+      <!-- Premio -->
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-300 mb-2">Premio (€)</label>
+        <input
+          type="number"
+          formControlName="premio"
+          placeholder="0"
+          min="0"
+          step="100"
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg transition-all duration-300"
+          [class.border-red-500]="premioControl?.invalid && premioControl?.touched">
+        <div *ngIf="premioControl?.invalid && premioControl?.touched" class="text-red-400 text-sm mt-1">
+          <div *ngIf="premioControl?.errors?.['required']">El premio es requerido</div>
+          <div *ngIf="premioControl?.errors?.['min']">El premio no puede ser negativo</div>
+        </div>
+      </div>
+
+      <!-- Info sobre participantes -->
+      <div class="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+        <div class="flex items-center text-blue-400 text-sm">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Máximo 20 participantes por torneo
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-4">
+        <button
+          type="button"
+          (click)="closeCreateModal()"
+          class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 px-4 rounded-lg font-bold transition-all duration-300">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="createTorneoForm.invalid || loading"
+          class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white py-3 px-4 rounded-lg font-bold transition-all duration-300">
+          {{ loading ? 'Creando...' : 'Crear Torneo' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
